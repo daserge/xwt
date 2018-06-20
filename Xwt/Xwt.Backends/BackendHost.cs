@@ -65,6 +65,11 @@ namespace Xwt.Backends
 		bool usingCustomBackend;
 		Toolkit engine;
 
+		~BackendHost()
+		{
+			Dispose(false);
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Xwt.Backends.BackendHost"/> class.
 		/// </summary>
@@ -197,9 +202,26 @@ namespace Xwt.Backends
 
 		public void Dispose ()
 		{
-			foreach (var ev in enabledEvents)
-				Backend.DisableEvent (ev);
-			enabledEvents.Clear ();
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected void Dispose (bool disposing)
+		{
+			if (!BackendCreated)
+				return;
+
+			if (disposing)
+				ClearEvents(enabledEvents, Backend);
+			else
+				EngineBackend.InvokeAsync(() => ClearEvents(enabledEvents, Backend));
+		}
+
+		static void ClearEvents(List<object> events, IBackend backend)
+		{
+			foreach (var ev in events)
+				backend.DisableEvent(ev);
+			events.Clear();
 		}
 	}
 }
