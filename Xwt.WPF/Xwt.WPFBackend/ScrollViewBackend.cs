@@ -26,17 +26,29 @@
 
 using System;
 using Xwt.Backends;
-using Xwt.WPFBackend;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows;
 
 namespace Xwt.WPFBackend
 {
 	public class ScrollViewBackend
 		: WidgetBackend, IScrollViewBackend
 	{
-		public ScrollViewBackend()
+		public ScrollViewBackend ()
 		{
-			ScrollViewer = new ExScrollViewer();
+			ScrollViewer = new ExScrollViewer ();
+		}
+
+		public void PassKeyPress (object sender, KeyEventArgs args)
+		{
+			if (!(args.Key == Key.Up || args.Key == Key.Down || args.Key == Key.PageUp || args.Key == Key.PageDown))
+				return;
+
+			var keyEvent = new System.Windows.Input.KeyEventArgs (InputManager.Current.PrimaryKeyboardDevice,
+				PresentationSource.FromVisual ((UIElement) NativeWidget), (int) args.Timestamp, (System.Windows.Input.Key) args.NativeKeyCode);
+			keyEvent.RoutedEvent = ScrollViewer.KeyDownEvent;
+			((UIElement) NativeWidget).RaiseEvent (keyEvent);
 		}
 
 		public ScrollPolicy VerticalScrollPolicy
@@ -52,18 +64,18 @@ namespace Xwt.WPFBackend
 		}
 
 		IScrollControlBackend vscrollControl;
-		public IScrollControlBackend CreateVerticalScrollControl()
+		public IScrollControlBackend CreateVerticalScrollControl ()
 		{
 			if (vscrollControl == null)
-				vscrollControl = new ScrollControlBackend(ScrollViewer, true);
+				vscrollControl = new ScrollControlBackend (ScrollViewer, true);
 			return vscrollControl;
 		}
 
 		IScrollControlBackend hscrollControl;
-		public IScrollControlBackend CreateHorizontalScrollControl()
+		public IScrollControlBackend CreateHorizontalScrollControl ()
 		{
 			if (hscrollControl == null)
-				hscrollControl = new ScrollControlBackend(ScrollViewer, false);
+				hscrollControl = new ScrollControlBackend (ScrollViewer, false);
 			return hscrollControl;
 		}
 
@@ -71,7 +83,7 @@ namespace Xwt.WPFBackend
 		{
 			get
 			{
-				return VerticalScrollPolicy != ScrollPolicy.Never ? - 1 : -2;
+				return VerticalScrollPolicy != ScrollPolicy.Never ? -1 : -2;
 			}
 		}
 
@@ -107,8 +119,8 @@ namespace Xwt.WPFBackend
 			// The child has to be removed from the viewport
 
 			if (ScrollViewer.Content != null) {
-				var port = (CustomScrollViewPort)ScrollViewer.Content;
-				port.Children.Remove (port.Children[0]);
+				var port = (CustomScrollViewPort) ScrollViewer.Content;
+				port.Children.Remove (port.Children [0]);
 			}
 
 			if (child == null)
@@ -116,7 +128,7 @@ namespace Xwt.WPFBackend
 
 			SetChildPlacement (child);
 			ScrollAdjustmentBackend vbackend = null, hbackend = null;
-			var widget = (WidgetBackend)child;
+			var widget = (WidgetBackend) child;
 
 			if (widget.EventSink.SupportsCustomScrolling ()) {
 				vscrollControl = vbackend = new ScrollAdjustmentBackend ();
@@ -128,7 +140,7 @@ namespace Xwt.WPFBackend
 			if (vbackend != null)
 				widget.EventSink.SetScrollAdjustments (hbackend, vbackend);
 		}
-		
+
 		public void SetChildSize (Size s)
 		{
 
@@ -138,7 +150,7 @@ namespace Xwt.WPFBackend
 		{
 			get
 			{
-				return new Rectangle (	ScrollViewer.HorizontalOffset,
+				return new Rectangle (ScrollViewer.HorizontalOffset,
 										ScrollViewer.VerticalOffset,
 										ScrollViewer.ViewportWidth,
 										ScrollViewer.ViewportHeight);
@@ -150,7 +162,7 @@ namespace Xwt.WPFBackend
 			base.EnableEvent (eventId);
 
 			if (eventId is ScrollViewEvent) {
-				switch ((ScrollViewEvent)eventId) {
+				switch ((ScrollViewEvent) eventId) {
 					case ScrollViewEvent.VisibleRectChanged:
 						break;
 				}
@@ -159,10 +171,10 @@ namespace Xwt.WPFBackend
 
 		public override void DisableEvent (object eventId)
 		{
-			base.DisableEvent(eventId);
+			base.DisableEvent (eventId);
 
 			if (eventId is ScrollViewEvent) {
-				switch ((ScrollViewEvent)eventId) {
+				switch ((ScrollViewEvent) eventId) {
 					case ScrollViewEvent.VisibleRectChanged:
 						break;
 				}
@@ -186,7 +198,7 @@ namespace Xwt.WPFBackend
 					return ScrollBarVisibility.Disabled;
 
 				default:
-					throw new NotSupportedException();
+					throw new NotSupportedException ();
 			}
 		}
 
@@ -201,7 +213,7 @@ namespace Xwt.WPFBackend
 					return ScrollPolicy.Never;
 
 				default:
-					throw new NotSupportedException();
+					throw new NotSupportedException ();
 			}
 		}
 	}

@@ -39,6 +39,7 @@ namespace Xwt.Backends
 		Rectangle VisibleRect { get; }
 		
 		void SetChildSize (Size size);
+		void PassKeyPress (object sender, KeyEventArgs e);
 	}
 	
 	public interface IScrollViewEventSink: IWidgetEventSink

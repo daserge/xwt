@@ -28,71 +28,81 @@ using Xwt.Backends;
 
 namespace Xwt
 {
-	[BackendType (typeof(IScrollViewBackend))]
-	public class ScrollView: Widget, IScrollableWidget
+	[BackendType (typeof (IScrollViewBackend))]
+	public class ScrollView : Widget, IScrollableWidget
 	{
 		Widget child;
 		EventHandler visibleRectChanged;
-		
-		protected new class WidgetBackendHost: Widget.WidgetBackendHost, IScrollViewEventSink
+
+		protected new class WidgetBackendHost : Widget.WidgetBackendHost, IScrollViewEventSink
 		{
 			public void OnVisibleRectChanged ()
 			{
-				((ScrollView)Parent).OnVisibleRectChanged (EventArgs.Empty);
+				((ScrollView) Parent).OnVisibleRectChanged (EventArgs.Empty);
 			}
-			
+
 			public override Size GetDefaultNaturalSize ()
 			{
 				return Xwt.Backends.DefaultNaturalSizes.ScrollView;
 			}
 		}
-		
+
 		protected override BackendHost CreateBackendHost ()
 		{
 			return new WidgetBackendHost ();
 		}
-		
+
 		IScrollViewBackend Backend {
-			get { return (IScrollViewBackend)BackendHost.Backend; }
+			get { return (IScrollViewBackend) BackendHost.Backend; }
 		}
-		
+
 		public ScrollView ()
 		{
 			HorizontalScrollPolicy = ScrollPolicy.Automatic;
 			VerticalScrollPolicy = ScrollPolicy.Automatic;
 		}
-		
-		public ScrollView (Widget child): this ()
+
+		public ScrollView (Widget child) : this ()
 		{
 			VerifyConstructorCall (this);
 			Content = child;
 		}
-		
+
 		public new Widget Content {
 			get { return child; }
 			set {
-				if (child != null)
+				if (child != null) {
+					child.KeyPressed -= Child_KeyPressed;
 					UnregisterChild (child);
+				}
 				child = value;
-				if (child != null)
+				if (child != null) {
 					RegisterChild (child);
-				Backend.SetChild ((IWidgetBackend)GetBackend (child));
+					child.KeyPressed += Child_KeyPressed;
+				}
+				Backend.SetChild ((IWidgetBackend) GetBackend (child));
 				OnPreferredSizeChanged ();
 			}
 		}
-		
+
+		private void Child_KeyPressed (object sender, KeyEventArgs e)
+		{
+			if (ChildForwardsKeyPresses && Desktop.DesktopType == DesktopType.Windows)
+				Backend.PassKeyPress (sender, e);
+		}
+
 		protected override void OnReallocate ()
 		{
 			if (child != null && !child.SupportsCustomScrolling)
 				Backend.SetChildSize (child.Surface.GetPreferredSize (SizeConstraint.Unconstrained, SizeConstraint.Unconstrained));
 			base.OnReallocate ();
 		}
-		
+
 		public ScrollPolicy VerticalScrollPolicy {
 			get { return Backend.VerticalScrollPolicy; }
 			set { Backend.VerticalScrollPolicy = value; OnPreferredSizeChanged (); }
 		}
-		
+
 		public ScrollPolicy HorizontalScrollPolicy {
 			get { return Backend.HorizontalScrollPolicy; }
 			set { Backend.HorizontalScrollPolicy = value; OnPreferredSizeChanged (); }
@@ -119,12 +129,17 @@ namespace Xwt
 		public Rectangle VisibleRect {
 			get { return Backend.VisibleRect; }
 		}
-		
+
 		public bool BorderVisible {
 			get { return Backend.BorderVisible; }
 			set { Backend.BorderVisible = value; }
 		}
-		
+
+		/// <summary>
+		/// Child will bubble a keyboard event up if "true" so that the view can be scrolled. (Windows-only)
+		/// </summary>
+		public bool ChildForwardsKeyPresses { get; set; }
+
 		public event EventHandler VisibleRectChanged {
 			add {
 				BackendHost.OnBeforeEventAdd (ScrollViewEvent.VisibleRectChanged, visibleRectChanged);
@@ -135,14 +150,14 @@ namespace Xwt
 				BackendHost.OnAfterEventRemove (ScrollViewEvent.VisibleRectChanged, visibleRectChanged);
 			}
 		}
-		
+
 		protected virtual void OnVisibleRectChanged (EventArgs e)
 		{
 			if (visibleRectChanged != null)
 				visibleRectChanged (this, e);
 		}
 	}
-	
+
 	public enum ScrollPolicy
 	{
 		Always,
