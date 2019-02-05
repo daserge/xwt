@@ -38,6 +38,7 @@ namespace Xwt
 		static ToolkitEngineBackend engine;
 		static UILoop mainLoop;
 		static ITranslationCatalog translationCatalog;
+		public static Accessibility.BaseAccessibilityHelper AccessibilityHelper { get; private set; } = new Accessibility.BaseAccessibilityHelper ();
 
 		/// <summary>
 		/// Gets the task scheduler of the current engine.
@@ -107,6 +108,7 @@ namespace Xwt
 			toolkit.SetActive ();
 			engine = toolkit.Backend;
 			mainLoop = new UILoop (toolkit);
+			AccessibilityHelper = engine.AccessibilityHelper;
 
 			UIThread = System.Threading.Thread.CurrentThread;
 

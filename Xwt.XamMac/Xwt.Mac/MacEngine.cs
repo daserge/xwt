@@ -47,6 +47,7 @@ namespace Xwt.Mac
 		{
 			NSApplicationInitializer.Initialize ();
 
+			AccessibilityHelper = new AccessibilityHelper ();
 			//Hijack ();
 			if (pool != null)
 				pool.Dispose ();

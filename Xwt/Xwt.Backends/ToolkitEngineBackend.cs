@@ -31,6 +31,7 @@ using System.IO;
 using Xwt.Drawing;
 
 using System.Collections.Generic;
+using Xwt.Accessibility;
 
 namespace Xwt.Backends
 {
@@ -67,6 +68,8 @@ namespace Xwt.Backends
 		{
 			return (T)Toolkit.GetToolkitBackend (typeof (T));
 		}
+
+		public BaseAccessibilityHelper AccessibilityHelper { get; protected set; }
 
 		/// <summary>
 		/// Gets the application context.

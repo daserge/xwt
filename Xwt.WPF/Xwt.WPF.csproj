@@ -148,6 +148,7 @@
     <Compile Include="Xwt.WPFBackend\ValuesContainer.cs" />
     <Compile Include="Xwt.WPFBackend\CanvasBackend.cs" />
     <Compile Include="Xwt.WPFBackend\WidgetBackend.cs" />
+    <Compile Include="Xwt.WPFBackend\AccessibilityHelper.cs" />
     <Compile Include="Xwt.WPFBackend\WindowBackend.cs" />
     <Compile Include="Xwt.WPFBackend\WindowFrameBackend.cs" />
     <Compile Include="Xwt.WPFBackend\WPFEngine.cs" />
