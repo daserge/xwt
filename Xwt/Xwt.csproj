@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -363,6 +363,7 @@
     <Compile Include="Xwt.Drawing\FontSizeTextAttribute.cs" />
     <Compile Include="Xwt.Accessibility\AccessibleFields.cs" />
     <Compile Include="Xwt.Accessibility\XwtAccessibleBackend.cs" />
+    <Compile Include="Xwt.Accessibility\BaseAccessibilityHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
