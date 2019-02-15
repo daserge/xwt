@@ -64,6 +64,9 @@
       <Link>NSApplicationInitializer.cs</Link>
     </Compile>
     <Compile Include="GtkMacAccessibleBackend.cs" />
+    <Compile Include="..\Xwt.XamMac\Xwt.Mac\AccessibilityHelper.cs">
+      <Link>AccessibilityHelper.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="..\BuildHelpers.targets" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

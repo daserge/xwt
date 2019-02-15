@@ -149,6 +149,9 @@ namespace Xwt.GtkBackend
 				if (platformType != null) {
 					platformBackend = (GtkPlatformBackend)Activator.CreateInstance (platformType);
 					platformBackend.Initialize (this);
+					if (Platform.IsMac) {
+						AccessibilityHelper = platformBackend.AccessibilityHelper;
+					}
 				}
 			}
 		}

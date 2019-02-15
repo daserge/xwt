@@ -10,6 +10,10 @@ namespace Xwt.Mac
 		static AccessibilityHelper instance;
 		public AccessibilityHelper ()
 		{
+			// Don't swizzle twice if we have both XamMac and GtkMac running
+			if (instance != null)
+				return;
+
 			instance = this;
 			// TODO: Test if this works with VSM swizzle
 			SwizzleNSApplicationAccessibilitySetter ();
@@ -36,6 +40,9 @@ namespace Xwt.Mac
 		{
 			// Swizzle accessibilitySetValue:forAttribute: so that we can detect when VoiceOver gets enabled
 			var nsApplicationClassHandle = Class.GetHandle ("NSApplication");
+			if (nsApplicationClassHandle == IntPtr.Zero)
+				return;
+
 			var accessibilitySetValueForAttributeSelector = Selector.GetHandle ("accessibilitySetValue:forAttribute:");
 
 			var accessibilitySetValueForAttributeMethod = class_getInstanceMethod (nsApplicationClassHandle, accessibilitySetValueForAttributeSelector);
