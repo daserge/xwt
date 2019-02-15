@@ -108,8 +108,9 @@ namespace Xwt
 			toolkit.SetActive ();
 			engine = toolkit.Backend;
 			mainLoop = new UILoop (toolkit);
-			AccessibilityHelper = engine.AccessibilityHelper;
-
+			if (engine.AccessibilityHelper != null)
+				AccessibilityHelper = engine.AccessibilityHelper;
+			
 			UIThread = System.Threading.Thread.CurrentThread;
 
 			toolkit.EnterUserCode ();

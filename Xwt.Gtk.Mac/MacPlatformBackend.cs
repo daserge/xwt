@@ -27,22 +27,23 @@ using System;
 using Xwt.GtkBackend;
 using Xwt.Backends;
 using AppKit;
-using Xwt.Mac;
 
 namespace Xwt.Gtk.Mac
 {
 	public class MacPlatformBackend: GtkPlatformBackend
 	{
-		public override void Initialize (ToolkitEngineBackend toolit)
+		public override void Initialize (ToolkitEngineBackend toolkit)
 		{
-			toolit.RegisterBackend <IWebViewBackend,WebViewBackend> ();
-			toolit.RegisterBackend <DesktopBackend,GtkMacDesktopBackend> ();
-			toolit.RegisterBackend <FontBackendHandler,GtkMacFontBackendHandler> ();
-			toolit.RegisterBackend <IPopoverBackend,GtkMacPopoverBackend> ();
-			toolit.RegisterBackend <IOpenFileDialogBackend, GtkMacOpenFileDialogBackend> ();
-			toolit.RegisterBackend <ISaveFileDialogBackend, GtkMacSaveFileDialogBackend> ();
-			toolit.RegisterBackend <ISelectFolderDialogBackend, GtkMacSelectFolderBackend> ();
-			toolit.RegisterBackend <IAccessibleBackend, GtkMacAccessibleBackend> ();
+			toolkit.RegisterBackend <IWebViewBackend,WebViewBackend> ();
+			toolkit.RegisterBackend <DesktopBackend,GtkMacDesktopBackend> ();
+			toolkit.RegisterBackend <FontBackendHandler,GtkMacFontBackendHandler> ();
+			toolkit.RegisterBackend <IPopoverBackend,GtkMacPopoverBackend> ();
+			toolkit.RegisterBackend <IOpenFileDialogBackend, GtkMacOpenFileDialogBackend> ();
+			toolkit.RegisterBackend <ISaveFileDialogBackend, GtkMacSaveFileDialogBackend> ();
+			toolkit.RegisterBackend <ISelectFolderDialogBackend, GtkMacSelectFolderBackend> ();
+			toolkit.RegisterBackend <IAccessibleBackend, GtkMacAccessibleBackend> ();
+
+			AccessibilityHelper = new Xwt.Mac.AccessibilityHelper ();
 		}
 
 		public override Type GetBackendImplementationType (Type backendType)
