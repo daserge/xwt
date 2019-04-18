@@ -217,5 +217,10 @@ namespace Xwt.Accessibility
 		{
 			return nativeBackend.GetChildren ();
 		}
+
+		public void MakeAnnouncement (string message)
+		{
+			nativeBackend.MakeAnnouncement (message);
+		}
 	}
 }

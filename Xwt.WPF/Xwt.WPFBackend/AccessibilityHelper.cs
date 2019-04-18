@@ -20,7 +20,10 @@ namespace Xwt.WPF.Xwt.WPFBackend
 
 		static bool IsSystemNarratorActive {
 			get {
-				return AutomationPeer.ListenerExists (AutomationEvents.AutomationFocusChanged);
+				// AutomationEvents.AutomationFocusChanged returns false sometimes when the application loses
+				// accessibility focus. So LiveRegionChanged plays fallback role here (it comes as true more reliable).
+				return AutomationPeer.ListenerExists (AutomationEvents.AutomationFocusChanged)
+					|| AutomationPeer.ListenerExists (AutomationEvents.LiveRegionChanged);
 			}
 		}
 

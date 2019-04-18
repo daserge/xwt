@@ -10,8 +10,5 @@ namespace Xwt.Accessibility
 		{
 			AccessibilityInUseChanged?.Invoke (this, EventArgs.Empty);
 		}
-
-		// TODO:
-		public virtual void MakeAccessibilityAnnouncement () { }
 	}
 }

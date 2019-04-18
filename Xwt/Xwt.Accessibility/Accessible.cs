@@ -260,6 +260,11 @@ namespace Xwt.Accessibility
 				backendHost.OnAfterEventRemove (AccessibleEvent.Press, press);
 			}
 		}
+
+		public void MakeAnnouncement(string message)
+		{
+			Backend.MakeAnnouncement(message);
+		}
 	}
 
 	class DefaultNoOpAccessibleBackend : IAccessibleBackend
@@ -333,6 +338,10 @@ namespace Xwt.Accessibility
 		}
 
 		public void InitializeBackend (object frontend, ApplicationContext context)
+		{
+		}
+
+		public void MakeAnnouncement(string message)
 		{
 		}
 	}

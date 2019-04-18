@@ -66,6 +66,8 @@ namespace Xwt.Backends
 		void RemoveChild (object nativeChild);
 		void RemoveAllChildren ();
 		IEnumerable<object> GetChildren ();
+
+		void MakeAnnouncement (string message);
 	}
 
 	public interface IAccessibleEventSink
