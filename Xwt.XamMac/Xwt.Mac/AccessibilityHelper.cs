@@ -7,6 +7,7 @@ namespace Xwt.Mac
 {
 	public sealed class AccessibilityHelper : Accessibility.BaseAccessibilityHelper
 	{
+		static bool initialized;
 		static AccessibilityHelper instance;
 		public AccessibilityHelper ()
 		{
@@ -40,6 +41,10 @@ namespace Xwt.Mac
 		{
 			// Swizzle accessibilitySetValue:forAttribute: so that we can detect when VoiceOver gets enabled
 			var nsApplicationClassHandle = Class.GetHandle ("NSApplication");
+
+			// This happens if GtkMac is loaded before XamMac
+			// TODO: in this case the current value ot VO state will be always false,
+			// so need to actualize it when we do the swizzle
 			if (nsApplicationClassHandle == IntPtr.Zero)
 				return;
 
@@ -54,6 +59,8 @@ namespace Xwt.Mac
 			block.SetupBlock (d, null);
 			var imp = imp_implementationWithBlock (ref block);
 			method_setImplementation (accessibilitySetValueForAttributeMethod, imp);
+
+			initialized = true;
 		}
 
 		[MonoPInvokeCallback (typeof (SwizzledAccessibilitySetValueForAttributeDelegate))]
@@ -66,12 +73,21 @@ namespace Xwt.Mac
 
 			bool previousValue = accessibilityInUse;
 			accessibilityInUse = val.BoolValue;
-			Console.WriteLine ("accessibilityInUse: " + accessibilityInUse);
+			Console.WriteLine ("Xwt AccessibilityHelper accessibilityInUse: " + accessibilityInUse);
 			if (accessibilityInUse != previousValue)
 				instance.OnAccessibilityInUseChanged ();
 		}
 
 		static bool accessibilityInUse;
-		public override bool AccessibilityInUse => accessibilityInUse;
+		public override bool AccessibilityInUse
+		{
+			get
+			{
+				if (!initialized)
+					SwizzleNSApplicationAccessibilitySetter ();
+
+				return accessibilityInUse;
+			}
+		}
 	}
 }

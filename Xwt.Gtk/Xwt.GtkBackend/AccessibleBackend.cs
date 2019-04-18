@@ -229,5 +229,10 @@ namespace Xwt.GtkBackend
 		{
 			throw new NotImplementedException ();
 		}
+
+		public virtual void MakeAnnouncement (string message)
+		{
+			// TODO
+		}
 	}
 }

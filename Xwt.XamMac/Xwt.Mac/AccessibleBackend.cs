@@ -284,5 +284,10 @@ namespace Xwt.Mac
 				}
 			}
 		}
+
+		public void MakeAnnouncement (string message)
+		{
+			// TODO
+		}
 	}
 }

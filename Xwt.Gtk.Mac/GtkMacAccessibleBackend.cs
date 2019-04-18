@@ -147,5 +147,16 @@ namespace Xwt.Gtk.Mac
 
 			nsa.AccessibilityChildren = null;
 		}
+
+		public override void MakeAnnouncement (string message)
+		{
+			var nsObject = NSApplication.SharedApplication?.AccessibilityFocusedWindow;
+			if (nsObject == null)
+				return;
+			var dictionary =
+				new NSDictionary (NSAccessibilityNotificationUserInfoKeys.AnnouncementKey, new NSString (message),
+					NSAccessibilityNotificationUserInfoKeys.PriorityKey, NSAccessibilityPriorityLevel.High);
+			NSAccessibility.PostNotification (nsObject, NSAccessibilityNotifications.AnnouncementRequestedNotification, dictionary);
+		}
 	}
 }
