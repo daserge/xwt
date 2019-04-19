@@ -30,6 +30,7 @@ using Foundation;
 using ObjCRuntime;
 using Xwt.Accessibility;
 using Xwt.GtkBackend;
+using Xwt.Mac;
 using GtkWidget = Gtk.Widget;
 
 namespace Xwt.Gtk.Mac
@@ -150,13 +151,7 @@ namespace Xwt.Gtk.Mac
 
 		public override void MakeAnnouncement (string message)
 		{
-			var nsObject = NSApplication.SharedApplication?.AccessibilityFocusedWindow;
-			if (nsObject == null)
-				return;
-			var dictionary =
-				new NSDictionary (NSAccessibilityNotificationUserInfoKeys.AnnouncementKey, new NSString (message),
-					NSAccessibilityNotificationUserInfoKeys.PriorityKey, NSAccessibilityPriorityLevel.High);
-			NSAccessibility.PostNotification (nsObject, NSAccessibilityNotifications.AnnouncementRequestedNotification, dictionary);
+			AccessibilityHelper.MakeAnnoucement (message);
 		}
 	}
 }

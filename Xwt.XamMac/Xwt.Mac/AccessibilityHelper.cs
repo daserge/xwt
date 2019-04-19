@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using AppKit;
 using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
@@ -89,6 +90,20 @@ namespace Xwt.Mac
 
 				return accessibilityInUse;
 			}
+		}
+
+		public static void MakeAnnoucement (string message)
+		{
+			if (!initialized)
+				return;
+
+			var nsObject = NSApplication.SharedApplication?.AccessibilityFocusedWindow;
+			if (nsObject == null)
+				return;
+			var dictionary =
+				new NSDictionary (NSAccessibilityNotificationUserInfoKeys.AnnouncementKey, new NSString (message),
+					NSAccessibilityNotificationUserInfoKeys.PriorityKey, NSAccessibilityPriorityLevel.High);
+			NSAccessibility.PostNotification (nsObject, NSAccessibilityNotifications.AnnouncementRequestedNotification, dictionary);
 		}
 	}
 }

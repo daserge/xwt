@@ -287,7 +287,7 @@ namespace Xwt.Mac
 
 		public void MakeAnnouncement (string message)
 		{
-			// TODO
+			AccessibilityHelper.MakeAnnoucement (message);
 		}
 	}
 }
