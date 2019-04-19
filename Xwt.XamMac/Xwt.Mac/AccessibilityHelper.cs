@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
 
@@ -43,8 +44,6 @@ namespace Xwt.Mac
 			var nsApplicationClassHandle = Class.GetHandle ("NSApplication");
 
 			// This happens if GtkMac is loaded before XamMac
-			// TODO: in this case the current value ot VO state will be always false,
-			// so need to actualize it when we do the swizzle
 			if (nsApplicationClassHandle == IntPtr.Zero)
 				return;
 
@@ -60,6 +59,8 @@ namespace Xwt.Mac
 			var imp = imp_implementationWithBlock (ref block);
 			method_setImplementation (accessibilitySetValueForAttributeMethod, imp);
 
+			accessibilityInUse = CFPreferences.GetAppBooleanValue ("voiceOverOnOffKey", "com.apple.universalaccess");
+			Console.WriteLine ("Xwt AccessibilityHelper initial accessibilityInUse: " + accessibilityInUse);
 			initialized = true;
 		}
 
