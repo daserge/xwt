@@ -33,6 +33,6 @@ namespace Xwt.WPF.Xwt.WPFBackend
 			}
 		}
 
-		// AccessibilityInUseChanged event would require listening for a top-level window' events in WndProc
+		// TODO: AccessibilityInUseChanged event would require listening for a top-level window' events in WndProc
 	}
 }
