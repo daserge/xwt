@@ -208,29 +208,7 @@ namespace Xwt.WPFBackend
 
 		public void MakeAnnouncement (string message)
 		{
-			string previousAccessibleLabel = Label;
-			element.Dispatcher.BeginInvoke ((Action)(() =>
-			{
-				AutomationProperties.SetLiveSetting (element, AutomationLiveSetting.Assertive);
-
-				Label = message;
-				var peer = FrameworkElementAutomationPeer.FromElement (element);
-				if (peer != null)
-				{
-					peer.RaiseAutomationEvent (AutomationEvents.LiveRegionChanged);
-
-					// HACK: Giving some time to announce the message
-					Task.Run (async () =>
-					{
-						await Task.Delay (5000);
-						element.Dispatcher.BeginInvoke ((Action)(() =>
-						{
-							AutomationProperties.SetLiveSetting (element, AutomationLiveSetting.Off);
-							Label = previousAccessibleLabel;
-						}), DispatcherPriority.Render);
-					});
-				}
-			}), DispatcherPriority.Render);
+			(Xwt.Application.AccessibilityHelper as AccessibilityHelper)?.MakeAnnouncement (element, this, message);
 		}
 	}
 }

@@ -36,7 +36,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Xwt.Backends;
 using Xwt.Drawing;
-using Xwt.WPF.Xwt.WPFBackend;
 
 namespace Xwt.WPFBackend
 {
@@ -49,7 +48,6 @@ namespace Xwt.WPFBackend
 		public WPFEngine ()
 		{
 			Instance = this;
-			AccessibilityHelper = new AccessibilityHelper ();
 		}
 
 		public override void InitializeApplication ()

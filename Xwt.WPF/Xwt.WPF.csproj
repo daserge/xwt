@@ -9,7 +9,7 @@
     <AssemblyName>Xwt.WPF</AssemblyName>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -67,6 +67,7 @@
     <Compile Include="Xwt.WPFBackend.Utilities\ImageToImageSourceConverter.cs" />
     <Compile Include="Xwt.WPFBackend.Utilities\MarkupToPlainTextConverter.cs" />
     <Compile Include="Xwt.WPFBackend.Utilities\TypeToStringConverter.cs" />
+    <Compile Include="Xwt.WPFBackend\AccessibilityHelper.cs" />
     <Compile Include="Xwt.WPFBackend\AccessibleBackend.cs" />
     <Compile Include="Xwt.WPFBackend\AlertDialogBackend.cs" />
     <Compile Include="Xwt.WPFBackend\Backend.cs" />
@@ -152,7 +153,6 @@
     <Compile Include="Xwt.WPFBackend\ValuesContainer.cs" />
     <Compile Include="Xwt.WPFBackend\CanvasBackend.cs" />
     <Compile Include="Xwt.WPFBackend\WidgetBackend.cs" />
-    <Compile Include="Xwt.WPFBackend\AccessibilityHelper.cs" />
     <Compile Include="Xwt.WPFBackend\WindowBackend.cs" />
     <Compile Include="Xwt.WPFBackend\WindowFrameBackend.cs" />
     <Compile Include="Xwt.WPFBackend\WPFEngine.cs" />

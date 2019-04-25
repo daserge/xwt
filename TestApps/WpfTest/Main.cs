@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Runtime.CompilerServices;
 using Samples;
 using Xwt;
 
@@ -46,6 +47,8 @@ namespace WpfTest
 			*/
 			//WebViewEmulationMode = IEEmulationMode.IE11;
 
+			// Is there a better way?
+			RuntimeHelpers.RunClassConstructor (typeof (Xwt.WPF.AccessibilityEx.AccessibilityHelper).TypeHandle);
 			App.Run (ToolkitType.Wpf);
 		}
 
