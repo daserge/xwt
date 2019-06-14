@@ -131,7 +131,8 @@ namespace Xwt.GtkBackend
 		{
 			base.DisableEvent (eventId);
 			if (eventId is TableViewEvent) {
-				if (((TableViewEvent)eventId) == TableViewEvent.SelectionChanged)
+				if (((TableViewEvent)eventId) == TableViewEvent.SelectionChanged
+					&& Widget?.Selection != null)
 					Widget.Selection.Changed -= HandleWidgetSelectionChanged;
 			}
 		}
