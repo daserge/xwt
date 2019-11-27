@@ -74,6 +74,14 @@ namespace Xwt
 				}
 			}
 		}
+
+		/// <summary>
+		/// Wpf-only
+		/// </summary>
+		public Color Color {
+			get { return Backend.Color; }
+			set { Backend.Color = value; }
+		}
 	}
 }
 

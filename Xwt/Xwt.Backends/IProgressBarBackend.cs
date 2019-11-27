@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using Xwt.Drawing;
 
 namespace Xwt.Backends
 {
@@ -32,6 +33,7 @@ namespace Xwt.Backends
 	{
 		void SetFraction (double fraction);
 		void SetIndeterminate (bool indeterminate);
+		Color Color { get; set; }
 	}
 }
 

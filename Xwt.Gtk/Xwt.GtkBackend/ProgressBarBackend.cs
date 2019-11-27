@@ -27,7 +27,7 @@
 using System;
 using System.Timers;
 using Xwt.Backends;
-
+using Xwt.Drawing;
 
 namespace Xwt.GtkBackend
 {
@@ -77,6 +77,9 @@ namespace Xwt.GtkBackend
 		{
 			Widget.Fraction = fraction;
 		}
+
+		// TODO
+		public Color Color { get; set; }
 
 		protected void DisposeTimeout ()
 		{

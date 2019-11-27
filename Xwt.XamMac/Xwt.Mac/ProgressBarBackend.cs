@@ -26,6 +26,7 @@
 
 using AppKit;
 using Xwt.Backends;
+using Xwt.Drawing;
 
 namespace Xwt.Mac
 {
@@ -67,6 +68,9 @@ namespace Xwt.Mac
 			if (value)
 				widget.StartAnimation (null);
 		}
+
+		// TODO
+		public Color Color { get; set; }
 	}
 	
 	public class ProgressIndicatorView: NSProgressIndicator, IViewObject

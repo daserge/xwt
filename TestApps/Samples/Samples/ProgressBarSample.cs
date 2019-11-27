@@ -50,7 +50,8 @@ namespace Samples
 			timer.Elapsed += Increase;
 			determinateProgressBar = new ProgressBar ();
 			determinateProgressBar.Fraction = 0.0;
-
+			if (Toolkit.CurrentEngine.Type == ToolkitType.Wpf)
+				determinateProgressBar.Color = Xwt.Drawing.Colors.DarkGreen;
 			determinateProgressBar.Accessible.AccessibilityInUseChanged += Accessible_AccessibilityInUseChanged;
 
 			PackStart(determinateProgressBar, true);

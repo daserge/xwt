@@ -24,6 +24,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System.Linq;
+using System.Windows;
+using System.Windows.Media;
 using Xwt.Backends;
 
 namespace Xwt.WPFBackend
@@ -41,6 +44,38 @@ namespace Xwt.WPFBackend
 			progressBar.Value = 0.0;
 
 			progressBar.IsIndeterminate = false;
+		}
+
+		Style style;
+		Xwt.Drawing.Color foregroundColor = Xwt.Drawing.Colors.Green;
+		void UpdateStyle ()
+		{
+			var wpfColorBrush = ResPool.GetSolidBrush (foregroundColor.ToWpfColor ());
+			if (style == null) {
+				style = new Style (typeof (System.Windows.Controls.ProgressBar));
+				style.Setters.Add (new Setter (System.Windows.Controls.ProgressBar.ForegroundProperty, wpfColorBrush));
+				Widget.Style = style;
+				return;
+			}
+
+			var setter = style.Setters
+				.FirstOrDefault (s => (s as Setter).Property == System.Windows.Controls.ProgressBar.ForegroundProperty)
+					as Setter;
+			if (setter != null)
+				setter.Value = wpfColorBrush;
+		}
+
+		public Xwt.Drawing.Color Color {
+			get {
+				return foregroundColor;
+			}
+			set {
+				if (foregroundColor == value)
+					return;
+
+				foregroundColor = value;
+				UpdateStyle ();
+			}
 		}
 
 		public void SetFraction (double fraction)
