@@ -39,11 +39,13 @@ namespace Xwt.Gtk.Mac
 
 		static void RemoveShadow (object sender, EventArgs e)
 		{
-			var popover = sender as GTK.Window;
-			if (popover != null) {
-				var window = GtkQuartz.GetWindow (popover);
-				window.HasShadow = false;
-			}
+			//var popover = sender as GTK.Window;
+			//if (popover != null)
+			//{
+			//	var window = GtkQuartz.GetWindow(popover);
+			//	if (window != null)
+			//		window.HasShadow = false;
+			//}
 		}
 	}
 }

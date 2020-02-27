@@ -24,6 +24,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Diagnostics;
+using System.Threading;
 using Xwt;
 
 namespace Samples
@@ -32,21 +34,38 @@ namespace Samples
 	{
 		Popover popover;
 		Popover popover2;
+		ComboBox cmbStyle;
+		Button btn;
+
+		bool popoverOpened;
 
 		public PopoverSample ()
 		{
-			var btn = new Button ("Click me");
+			btn = new Button ("Click me or focus me");
 			btn.Clicked += HandleClicked;
+			btn.GotFocus += Btn_GotFocus; ;
 			PackStart (btn);
 			var btn2 = new Button ("Click me");
 			btn2.Clicked += HandleClicked2;
 			PackEnd (btn2);
 		}
-	
+
+		private void Btn_GotFocus(object sender, EventArgs e)
+		{
+			Console.WriteLine($"Btn_GotFocus - popoverOpened? {popoverOpened}");
+			if (!popoverOpened)
+			{
+				btn.Sensitive = false;
+				HandleClicked(sender, e);
+			}
+		}
+
 		void HandleClicked (object sender, EventArgs e)
 		{
 			if (popover == null) {
+				Console.WriteLine("recreated popover");
 				popover = new Popover ();
+				popover.Closed += Popover_Closed;
 				popover.Padding = 20;
 
 				var table = new Table () { DefaultColumnSpacing = 20, DefaultRowSpacing = 10 };
@@ -57,7 +76,7 @@ namespace Samples
 				table.Add (new Label ("Family")  { TextAlignment = Alignment.End }, 0, 1);
 				table.Add (new ComboBox (), 1, 1, vexpand:true);
 
-				var cmbStyle = new ComboBox ();
+				cmbStyle = new ComboBox ();
 				cmbStyle.Items.Add ("Normal");
 				cmbStyle.Items.Add ("Bold");
 				cmbStyle.Items.Add ("Italic");
@@ -81,39 +100,46 @@ namespace Samples
 //			popover.Padding.SetAll (20);
 			popover.BackgroundColor = Xwt.Drawing.Colors.Yellow.WithAlpha(0.9);
 			popover.Show (Popover.Position.Top, (Button)sender, new Rectangle (50, 10, 5, 5));
+			popoverOpened = true;
+			cmbStyle.SetFocus();
+			Console.WriteLine("Popover opened");
+		}
+
+		private void Popover_Closed(object sender, EventArgs e)
+		{
+			Console.WriteLine("Popover_Closed");
+			popoverOpened = false;
+			btn.Sensitive = true;
 		}
 
 		void HandleClicked2 (object sender, EventArgs e)
 		{
-			if (popover2 == null) {
-				popover2 = new Popover ();
+			var popover3 = new Popover();
+			var table = new Table () { DefaultColumnSpacing = 20, DefaultRowSpacing = 10 };
+			table.Add (new Label ("Font") { TextAlignment = Alignment.End }, 0, 0);
+			table.Add (new ComboBox (), 1, 0, vexpand:true);
 
-				var table = new Table () { DefaultColumnSpacing = 20, DefaultRowSpacing = 10 };
-				table.Add (new Label ("Font") { TextAlignment = Alignment.End }, 0, 0);
-				table.Add (new ComboBox (), 1, 0, vexpand:true);
+			table.Add (new Label ("Family")  { TextAlignment = Alignment.End }, 0, 1);
+			table.Add (new ComboBox (), 1, 1, vexpand:true);
 
-				table.Add (new Label ("Family")  { TextAlignment = Alignment.End }, 0, 1);
-				table.Add (new ComboBox (), 1, 1, vexpand:true);
+			table.Add (new Label ("Style")  { TextAlignment = Alignment.End }, 0, 2);
+			table.Add (new ComboBox (), 1, 2, vexpand:true);
 
-				table.Add (new Label ("Style")  { TextAlignment = Alignment.End }, 0, 2);
-				table.Add (new ComboBox (), 1, 2, vexpand:true);
+			table.Add (new Label ("Size")  { TextAlignment = Alignment.End }, 0, 3);
+			table.Add (new SpinButton (), 1, 3, vexpand:true);
 
-				table.Add (new Label ("Size")  { TextAlignment = Alignment.End }, 0, 3);
-				table.Add (new SpinButton (), 1, 3, vexpand:true);
+			var b = new Button ("Add more");
+			table.Add (b, 0, 4);
+			int next = 5;
+			b.Clicked += delegate {
+				table.Add (new Label ("Row " + next), 0, next++);
+			};
 
-				var b = new Button ("Add more");
-				table.Add (b, 0, 4);
-				int next = 5;
-				b.Clicked += delegate {
-					table.Add (new Label ("Row " + next), 0, next++);
-				};
+			table.Margin = 6;
+			popover3.Content = table;
 
-				table.Margin = 6;
-				popover2.Content = table;
-			}
-
-			var newRect = new Rectangle (((Button)sender).Size.Width * 0.66d, 0, 0, 0);
-			popover2.Show (Popover.Position.Bottom, (Button)sender, newRect);
+			var newRect = new Rectangle(((Button)sender).Size.Width * 0.66d, 0, 0, 0);
+			popover3.Show(Popover.Position.Bottom, (Button)sender, newRect);
 		}
 	}
 }

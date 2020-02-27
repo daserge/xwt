@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.IO;
 using Samples;
 using Xwt;
 
@@ -32,9 +33,28 @@ namespace GtkTest
 {
 	class MainClass
 	{
+		static string LIB_ATKCOCOA_PATH = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../../libs/libatkcocoa.so");
+		static string LIB_ATKCOCOA_PATH_MONODEVELOP = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../../monodevelop/main/build/lib/gtk-2.0/libatkcocoa.so");
 		public static void Main (string[] args)
 		{
+			AddAtkCocoa();
 			App.Run (ToolkitType.Gtk);
 		}
+
+		static void AddAtkCocoa()
+		{
+			// Taking the AtkCocoa from monodevelop project if it exists and built
+			if (File.Exists(LIB_ATKCOCOA_PATH_MONODEVELOP))
+				Environment.SetEnvironmentVariable("GTK_MODULES", LIB_ATKCOCOA_PATH_MONODEVELOP);
+			else if (File.Exists(LIB_ATKCOCOA_PATH))
+			{
+				Environment.SetEnvironmentVariable("GTK_MODULES", LIB_ATKCOCOA_PATH);
+			}
+			else
+			{
+				Console.WriteLine("AtkCocoa library was not found. Accessibility may not work properly.");
+			}
+		}
+
 	}
 }
